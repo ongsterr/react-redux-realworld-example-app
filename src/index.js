@@ -1,14 +1,25 @@
+import App from './App';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { createStore } from 'redux';
 
-class App extends React.Component {
-  render() {
-    return (
-      <h1>Hello, World!</h1>
-    );
+const defaultState = {
+  appName: 'conduit',
+  articles: null,
+};
+const reducer = function (state = defaultState, action) {
+  switch (action.type) {
+    case 'TOGGLE':
+      return { ...state, checked: !state.checked };
   }
-}
+  return state;
+};
+
+const store = createStore(reducer);
 
 ReactDOM.render((
-  <App />
+  <Provider store={store}>
+    <App />
+  </Provider>
 ), document.getElementById('root'));
