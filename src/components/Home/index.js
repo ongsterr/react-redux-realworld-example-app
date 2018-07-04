@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Banner from './Banner';
 import MainView from './MainView';
-import api from '../../api/article';
+import api from '../../api';
 
 class Home extends Component {
   componentWillMount () {
@@ -33,7 +33,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    appName: state.appName
+    appName: state.common.appName
   };
 };
 

@@ -3,14 +3,28 @@ import { connect } from 'react-redux';
 
 import Header from './Header';
 import Home from './Home';
+import api from '../api';
 
 class App extends React.Component {
+  componentWillMount() {
+    const token = window.localStorage.getItem('jwt');
+    if (token) {
+      api.setToken(token);
+    }
+    this.props.onLoad(token ? api.getCurrentUser() : null, token); // Check what agent.Auth.current() is for
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.redirectTo) {
+      this.context.router.replace(nextProps.redirectTo);
+      this.props.onRedirect();
+    }
+  }
 
   render() {
     return (
       <div>
-        <Header appName={this.props.appName} />
-        <Home />
+        <Header appName={this.props.appName} currentUser={this.props.currentUser} />
+        {this.props.children}
       </div>
     );
   };
@@ -18,8 +32,21 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    appName: state.appName
+    appName: state.common.appName,
+    currentUser: state.common.currentUser,
+    redirectTo: state.common.redirectTo,
   };
 };
 
-export default connect(mapStateToProps, () => ({}))(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoad: (payload, token) => dispatch({type: 'APP_LOAD', payload, token}),
+    onRedirect: () => dispatch({type: 'REDIRECT'})
+  };
+}
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired // What does this do?
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

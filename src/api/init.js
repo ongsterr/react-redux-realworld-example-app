@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const config = {
-  baseURL: 'https://conduit.productionready.io/api'
+  baseURL: 'http://localhost:3000/api'
 };
 const instance = axios.create(config);
 
