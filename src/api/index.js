@@ -5,7 +5,8 @@ export default {
   login,
   setToken,
   getCurrentUser,
-  register
+  register,
+  updateSetting
 }
 
 let token = null;
@@ -38,10 +39,17 @@ async function getCurrentUser() {
 }
 
 async function register(username, email, password) {
-  const response = axios.post('/users', {
-    username,
-    email,
-    password,
+  const response = await axios.post('/users', {
+    user: {
+      username,
+      email,
+      password,
+    }
   });
   return response.data;
 }
+
+async function updateSetting(user) {
+  const response = await axios.put('/user', {user});
+  return response.data;
+};
