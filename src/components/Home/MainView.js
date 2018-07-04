@@ -2,6 +2,12 @@ import ArticleList from '../ArticleList';
 import React from 'react';
 import {connect} from 'react-redux';
 
+const mapStateToProps = state => {
+  return {
+    articles: state.home.articles
+  };
+};
+
 const MainView = props => {
   return (
     <div className="col-md-9">
@@ -15,12 +21,6 @@ const MainView = props => {
       <ArticleList articles={props.articles} />
     </div>
   );
-};
-
-const mapStateToProps = state => {
-  return {
-    articles: state.home.articles
-  };
 };
 
 export default connect(mapStateToProps, () => ({}))(MainView);

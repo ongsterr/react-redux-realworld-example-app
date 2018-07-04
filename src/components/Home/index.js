@@ -4,6 +4,18 @@ import Banner from './Banner';
 import MainView from './MainView';
 import api from '../../api';
 
+const mapStateToProps = state => {
+  return {
+    appName: state.common.appName
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoad: payload => dispatch({type: 'HOME_PAGE_LOADED', payload})
+  };
+};
+
 class Home extends Component {
   componentWillMount () {
     const articles = api.getArticles();
@@ -28,18 +40,6 @@ class Home extends Component {
         </div>
       </div>
     )
-  };
-};
-
-const mapStateToProps = state => {
-  return {
-    appName: state.common.appName
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onLoad: payload => dispatch({type: 'HOME_PAGE_LOADED', payload})
   };
 };
 

@@ -5,6 +5,21 @@ import Header from './Header';
 import Home from './Home';
 import api from '../api';
 
+const mapStateToProps = state => {
+  return {
+    appName: state.common.appName,
+    currentUser: state.common.currentUser,
+    redirectTo: state.common.redirectTo,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoad: (payload, token) => dispatch({type: 'APP_LOAD', payload, token}),
+    onRedirect: () => dispatch({type: 'REDIRECT'})
+  };
+}
+
 class App extends React.Component {
   componentWillMount() {
     const token = window.localStorage.getItem('jwt');
@@ -29,21 +44,6 @@ class App extends React.Component {
     );
   };
 };
-
-const mapStateToProps = state => {
-  return {
-    appName: state.common.appName,
-    currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onLoad: (payload, token) => dispatch({type: 'APP_LOAD', payload, token}),
-    onRedirect: () => dispatch({type: 'REDIRECT'})
-  };
-}
 
 App.contextTypes = {
   router: React.PropTypes.object.isRequired // What does this do?
