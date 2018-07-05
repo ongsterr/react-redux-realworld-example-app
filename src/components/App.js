@@ -26,7 +26,7 @@ class App extends React.Component {
     if (token) {
       api.setToken(token);
     }
-    this.props.onLoad(token ? api.getCurrentUser() : null, token); // Check what agent.Auth.current() is for
+    this.props.onLoad(token ? api.Auth.current() : null, token);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {

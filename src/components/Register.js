@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => {
     onChangeUsername: value =>
       dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'username', value }),
     onSubmit: (username, email, password) => {
-      const payload = api.register(username, email, password);
+      const payload = api.Auth.register(username, email, password);
       dispatch({type: 'REGISTER', payload});
     },
     onUnload: () => dispatch({ type: 'REGISTER_PAGE_UNLOADED' }),

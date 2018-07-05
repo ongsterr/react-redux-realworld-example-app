@@ -1,12 +1,9 @@
 import axios from './init';
 
 export default {
-  getArticles,
-  login,
+  Articles,
+  Auth,
   setToken,
-  getCurrentUser,
-  register,
-  updateSetting
 }
 
 let token = null;
@@ -14,61 +11,33 @@ function setToken(_token) {
   token = _token;
 }
 
-async function getArticles() {
-  const response = await axios({
+const tokenPlugin = token ? {'Authorization': `Bearer ${token}`} : '';
+
+const requests = {
+  get: async url => await axios({
     method: 'get',
-    url: '/articles?limit=10',
-    headers: token ? {'Authorization': `Bearer ${token}`} : '',
-  });
-  return response.data;
-}
-
-async function login(email, password) {
-  const response = await axios({
+    url,
+    headers: tokenPlugin
+  }).then(res => res.data),
+  post: async (url, body) => await axios({
     method: 'post',
-    url: '/users/login',
-    headers: token ? {'Authorization': `Bearer ${token}`} : '',
-    data: {
-      user: {
-        email,
-        password
-      }
-    },
-  });
-  return response.data;
-}
-
-async function getCurrentUser() {
-  const response = await axios({
-    method: 'get',
-    url: '/user',
-    headers: token ? {'Authorization': `Bearer ${token}`} : ''
-  });
-  return response.data;
-}
-
-async function register(username, email, password) {
-  const response = await axios({
-    method: 'post',
-    url: '/users',
-    headers: token ? {'Authorization': `Bearer ${token}`} : '',
-    data: {
-      user: {
-        username,
-        email,
-        password
-      }
-    },
-  });
-  return response.data;
-}
-
-async function updateSetting(user) {
-  const response = await axios({
+    url,
+    headers: tokenPlugin
+  }, body).then(res => res.data),
+  put: async (url, body) => await axios({
     method: 'put',
-    url: '/user',
-    headers: token ? {'Authorization': `Bearer ${token}`} : '',
-    data: user,
-  });
-  return response.data;
-};
+    url,
+    headers: tokenPlugin
+  }, body).then(res => res.data)
+}
+
+const Articles = {
+  all: () => requests.get('/articles?limit=10'),
+}
+
+const Auth = {
+  login: (email, password) => requests.post('/users/login', {user: {email, password}}),
+  current: () => requests.get('/user'),
+  register: (username, email, password) => requests.post('/users', {user: {username, email, password}}),
+  update: user => requests.put('/user', user),
+}

@@ -14,11 +14,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onClickLogout: () => dispatch({type: 'LOGOUT'}),
-    onSubmitForm: user => dispatch({type: 'SETTINGS_SAVED', payload: api.updateSetting(user)}),
+    onSubmitForm: user => dispatch({type: 'SETTINGS_SAVED', payload: api.Auth.update(user)}),
   };
 };
 
-class SettingsForm extends Component {
+class SettingsForm extends Component { // Downside here is that when the page is refreshed, "currentUser" will be undefined
   constructor(props) {
     super(props);
     console.log(props)
