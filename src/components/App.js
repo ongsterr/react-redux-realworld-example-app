@@ -21,12 +21,12 @@ const mapDispatchToProps = dispatch => {
 }
 
 class App extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       api.setToken(token);
     }
-    this.props.onLoad(token ? api.Auth.current() : null, token);
+    this.props.onLoad(token ? api.Auth.current() : null, token); // Check what agent.Auth.current() is for
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {

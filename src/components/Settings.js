@@ -14,7 +14,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onClickLogout: () => dispatch({type: 'LOGOUT'}),
-    onSubmitForm: user => dispatch({type: 'SETTINGS_SAVED', payload: api.Auth.update(user)}),
+    onSubmitForm: user => dispatch({type: 'SETTINGS_SAVED', payload: api.Auth.save(user)}),
   };
 };
 
@@ -43,7 +43,7 @@ class SettingsForm extends Component { // Downside here is that when the page is
       if (!user.password) {
         delete user.password;
       };
-      this.props.onSubmitForm({user});
+      this.props.onSubmitForm(user);
     };
   }
 

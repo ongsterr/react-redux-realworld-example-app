@@ -1,34 +1,37 @@
 import axios from './init';
 
-export default {
-  Articles,
-  Auth,
-  setToken,
-}
-
 let token = null;
 function setToken(_token) {
   token = _token;
 }
 
-const tokenPlugin = token ? {'Authorization': `Bearer ${token}`} : '';
-
 const requests = {
-  get: async url => await axios({
-    method: 'get',
-    url,
-    headers: tokenPlugin
-  }).then(res => res.data),
-  post: async (url, body) => await axios({
-    method: 'post',
-    url,
-    headers: tokenPlugin
-  }, body).then(res => res.data),
-  put: async (url, body) => await axios({
-    method: 'put',
-    url,
-    headers: tokenPlugin
-  }, body).then(res => res.data)
+  get: async url => {
+      const response = await axios({
+      method: 'get',
+      url,
+      headers: token ? {'Authorization': `Bearer ${token}`} : ''
+    });
+    return response.data;
+  },
+  post: async (url, body) => {
+    const response = await axios({
+      method: 'post',
+      url,
+      headers: token ? {'Authorization': `Bearer ${token}`} : '',
+      data: body,
+    });
+    return response.data;
+  },
+  put: async (url, body) => {
+    const response = await axios({
+      method: 'put',
+      url,
+      headers: token ? {'Authorization': `Bearer ${token}`} : '',
+      data: body,
+    });
+    return response.data;
+  },
 }
 
 const Articles = {
@@ -39,5 +42,11 @@ const Auth = {
   login: (email, password) => requests.post('/users/login', {user: {email, password}}),
   current: () => requests.get('/user'),
   register: (username, email, password) => requests.post('/users', {user: {username, email, password}}),
-  update: user => requests.put('/user', user),
+  save: user => requests.put('/user', {user}),
+}
+
+export default {
+  Articles,
+  Auth,
+  setToken,
 }
