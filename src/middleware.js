@@ -31,7 +31,7 @@ const localStorageMiddleware = store => next => action => {
       window.localStorage.setItem('jwt', action.payload.user.token);
       api.setToken(action.payload.user.token); // Need to build the "setToken" function in api
     }
-  } else if (action.tupe === 'LOGOUT') {
+  } else if (action.type === 'LOGOUT') {
     window.localStorage.setItem('jwt', '');
     api.setToken(null);
   }

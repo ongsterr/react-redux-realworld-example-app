@@ -22,6 +22,7 @@ const mapDispatchToProps = dispatch => {
       const payload = api.register(username, email, password);
       dispatch({type: 'REGISTER', payload});
     },
+    onUnload: () => dispatch({ type: 'REGISTER_PAGE_UNLOADED' }),
   };
 }
 
@@ -34,7 +35,11 @@ class Register extends Component {
     this.submitForm = (username, email, password) => event => {
       event.preventDefault();
       this.props.onSubmit(username, email, password);
-    }
+    };
+  }
+
+  componentWillUnmount() {
+    this.props.onUnload();
   }
 
   render() {

@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch => {
     onChangeEmail: value => dispatch({type: 'UPDATE_FIELD_AUTH', key: 'email', value}),
     onChangePassword: value => dispatch({type: 'UPDATE_FIELD_AUTH', key: 'password', value}),
     onSubmit: (email, password) => dispatch({type: 'LOGIN', payload: api.login(email, password)}),
+    onUnload: () => dispatch({type: 'LOGIN_PAGE_UNLOADED'}),
   }
 }
 
@@ -27,6 +28,11 @@ class Login extends Component {
       this.props.onSubmit(email, password);
     };
   }
+
+  componentWillUnmount() {
+    this.props.onUnload();
+  }
+
   render() {
     const {email, password} = this.props;
     return(

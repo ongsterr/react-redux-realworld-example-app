@@ -14,6 +14,12 @@ export default (state = {}, action) => {
       break;
     case 'UPDATE_FIELD_AUTH':
       return {...state, [action.key]: action.value};
+    case 'LOGIN_PAGE_UNLOADED':
+    case 'REGISTER_PAGE_UNLOADED':
+      if (action.subtype === 'LOGIN' || action.subtype === 'REGISTER') {
+        return {...state, inProgress: true};
+      };
+      break;
   }
 
   return state; 

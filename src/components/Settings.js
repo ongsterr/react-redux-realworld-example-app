@@ -19,53 +19,56 @@ const mapDispatchToProps = dispatch => {
 };
 
 class SettingsForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log(props)
     this.state = {
-      image: '',
-      username: '',
-      bio: '',
-      email: '',
+      image: props.currentUser.image || '',
+      username: props.currentUser.username,
+      bio: props.currentUser.bio || '',
+      email: props.currentUser.email,
       password: '',
     };
 
-    this.updateState = field => ev => {
-      const state = this.state;
-      const newState = Object.assign({}, state, {[field]: ev.target.value});
-      this.setState(newState);
+    this.updateState = ev => {
+      const target = ev.target;
+      const name = target.name;
+      const value = target.value;
+      this.setState({[name]: value});
     };
 
     this.submitForm = ev => {
       ev.preventDefault();
-      const user = Object.assign({}, this.state);
+      const user = this.state;
       if (!user.password) {
         delete user.password;
       };
-      this.props.onSubmitForm(user);
+      this.props.onSubmitForm({user});
     };
   }
 
   componentDidMount() {
     if (this.props.currentUser) {
-      Object.assign(this.state, {
+      const currentState = Object.assign(this.state, {
         image: this.props.currentUser.image || '',
         username: this.props.currentUser.username,
-        bio: this.props.currentUser.bio,
+        bio: this.props.currentUser.bio || '',
         email: this.props.currentUser.email,
       });
+      this.setState(currentState);
     };
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.currentUser) {
-      this.setState(Object.assign({}, this.state, {
-        image: nextProps.currentUser.image || '',
-        username: nextProps.currentUser.username,
-        bio: nextProps.currentUser.bio,
-        email: nextProps.currentUser.email,
-      }));
-    };
-  }
+  // componentWillUpdate(nextProps) {
+  //   if (nextProps.currentUser) {
+  //     this.setState(Object.assign({}, this.state, {
+  //       image: nextProps.currentUser.image || '',
+  //       username: nextProps.currentUser.username,
+  //       bio: nextProps.currentUser.bio,
+  //       email: nextProps.currentUser.email,
+  //     }));
+  //   };
+  // }
 
   render() {
     return (
@@ -76,8 +79,9 @@ class SettingsForm extends Component {
               type="text"
               className="form-control"
               placeholder="URL of profile picture"
+              name="image"
               value={this.state.image}
-              onChange={this.updateState('image')} />
+              onChange={this.updateState} />
           </fieldset>
 
           <fieldset className="form-group">
@@ -85,8 +89,9 @@ class SettingsForm extends Component {
               type="text"
               className="form-control form-control-lg"
               placeholder="Username"
+              name="username"
               value={this.state.username}
-              onChange={this.updateState('username')} />
+              onChange={this.updateState} />
           </fieldset>
 
           <fieldset className="form-group">
@@ -95,8 +100,9 @@ class SettingsForm extends Component {
               className="form-control form-control-lg"
               rows="8"
               placeholder="Short bio about you"
+              name="bio"
               value={this.state.bio}
-              onChange={this.updateState('bio')} />
+              onChange={this.updateState} />
           </fieldset>
 
           <fieldset className="form-group">
@@ -104,8 +110,9 @@ class SettingsForm extends Component {
               type="email"
               className="form-control form-control-lg"
               placeholder="Email"
+              name="email"
               value={this.state.email}
-              onChange={this.updateState('email')} />
+              onChange={this.updateState} />
           </fieldset>
 
           <fieldset className="form-group">
@@ -113,8 +120,9 @@ class SettingsForm extends Component {
               type="password"
               className="form-control form-control-lg"
               placeholder="New password"
+              name="password"
               value={this.state.password}
-              onChange={this.updateState('password')} />
+              onChange={this.updateState} />
           </fieldset>
 
           <button
