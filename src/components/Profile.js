@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
 import ArticleList from './ArticleList';
-import api from './api';
+import api from '../api';
 
 const mapStateToProps = state => {
   return {
@@ -22,9 +22,52 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
+const EditProfileSettings = props => {
+  if (props.isUser) {
+    return (
+      <Link 
+        className="btn btn-sm btn-outline-secondary action-btn"
+        to="settings">
+        <i className="ion-gear-a"></i>Edit Profile Settings
+      </Link>
+    );
+  }
+  return null;
+}
+
+const FollowUserButton = props => {
+  if (props.isUser) {
+    return null;
+  }
+
+  let classes = 'btn btn-sm action-btn';
+  if (props.user.following) {
+    classes += ' btn-secondary';
+  } else {
+    classes += ' btn-outline-secondary';
+  }
+
+  const handleClick = ev => {
+    ev.preventDefault();
+    if (props.user.following) {
+      props.unfollow(props.user.username);
+    } else {
+      props.follow(props.user.username);
+    };
+  };
+
+  return (
+    <button className={classes} onClick={handleClick}>
+      <i className="ion-plus-around"></i>
+      &nbsp;
+      {props.user.following ? 'Unfollow' : 'Follow'} {props.user.username}
+    </button>
+  );
+};
+
 class Profile extends Component {
   componentWillMount() {
-    this.props.unLoad(Promise.all([
+    this.props.onLoad(Promise.all([
       api.Profile.get(this.props.params.username),
       api.Articles.byAuthor(this.props.params.author),
     ]));
@@ -62,7 +105,7 @@ class Profile extends Component {
       return null;
     }
 
-    const isUser = this.props.currentUser && this.props.profile.username === props.currentUser.username;
+    const isUser = this.props.currentUser && this.props.profile.username === this.props.currentUser.username;
 
     return (
       <div className="profile-page">
@@ -74,7 +117,7 @@ class Profile extends Component {
                 <h4>{profile.username}</h4>
                 <p>{profile.bio}</p>
 
-                <EidtProfileSettings isUser={isUSer} />
+                <EditProfileSettings isUser={isUser} />
                 <FollowUserButton 
                   isUser={isUser}
                   user={profile}
