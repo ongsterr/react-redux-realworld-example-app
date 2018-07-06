@@ -4,7 +4,7 @@ import DeleteButton from './DeleteButton';
 
 const Comment = props => {
   const comment = props.comment;
-  const show = props.currentUser && props.currentUser.username === props.article.author.username;
+  const show = props.currentUser && props.currentUser.username === comment.author.username;
   return (
     <div className="card">
       <div className="card-block">

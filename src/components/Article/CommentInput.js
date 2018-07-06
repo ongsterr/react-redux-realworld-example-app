@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 import api from '../../api';
 
@@ -23,8 +23,8 @@ class CommentInput extends Component {
     this.createComment = ev => {
       ev.preventDefault();
       const payload = api.Comments.create(this.props.slug, {body: this.state.body});
-      this.props.onSubmit(payload);
       this.setState({body: ''});
+      this.props.onSubmit(payload);
     }
   }
 
@@ -52,4 +52,4 @@ class CommentInput extends Component {
   };
 }
 
-export default connect(mapDispatchToProps)(CommentInput);
+export default connect(() => ({}), mapDispatchToProps)(CommentInput);

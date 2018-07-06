@@ -12,7 +12,7 @@ export default (state = {}, action) => {
     case 'PROFILE_FAVORITES_PAGE_LOADED':
       return {
         ...state,
-        articles: action.payload[0].articles,
+        articles: action.payload[1].articles,
         articlesCount: action.payload[1].articlesCount,
       };
     case 'PROFILE_PAGE_UNLOADED':
