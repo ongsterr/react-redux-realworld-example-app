@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 const mapStateToProps = state => {
   return {
-    articles: state.home.articles
+    ...state.articleList // get the articles list from the 'articleList' reducer
   };
 };
 
