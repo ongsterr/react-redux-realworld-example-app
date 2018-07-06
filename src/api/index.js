@@ -32,10 +32,26 @@ const requests = {
     });
     return response.data;
   },
+  delete: async url => {
+    const response = await axios({
+      method: 'delete',
+      url,
+      headers: token ? {'Authorization': `Bearer ${token}`} : '',
+    });
+    return response.data;
+  },
 }
 
 const Articles = {
   all: () => requests.get('/articles?limit=10'),
+  get: slug => requests.get(`/articles/${slug}`),
+  del: slug => requests.delete(`/articles/${slug}`),
+}
+
+const Comments = {
+  forArticle: slug => requests.get(`/articles/${slug}/comments`),
+  create: (slug, comment) => requests.post(`/articles/${slug}/comments`, {comment}),
+  delete: (slug, commentId) => requests.delete(`/articles/${slug}/comments/${commentId}`),
 }
 
 const Auth = {
@@ -47,6 +63,7 @@ const Auth = {
 
 export default {
   Articles,
+  Comments,
   Auth,
   setToken,
 }
