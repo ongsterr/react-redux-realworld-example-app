@@ -6,20 +6,24 @@ import api from '../../api';
 
 const mapStateToProps = state => {
   return {
-    appName: state.common.appName
+    appName: state.common.appName,
+    token: state.common.token,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLoad: payload => dispatch({type: 'HOME_PAGE_LOADED', payload})
+    onLoad: (tab, payload) => dispatch({type: 'HOME_PAGE_LOADED', tab, payload}),
+    onUnload: () => dispatch({type: 'HOME_PAGE_UNLOADED'}),
   };
 };
 
 class Home extends Component {
   componentWillMount () {
-    const articles = api.Articles.all();
-    this.props.onLoad(articles);
+    const tab = this.props.token ? 'feed' : 'all';
+    const articlesPromise = this.props.token ? api.Articles.feed() : api.Articles.all();
+    
+    this.props.onLoad(tab, articlesPromise);
   };
 
   render() {

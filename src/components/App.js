@@ -9,6 +9,7 @@ const mapStateToProps = state => {
     appName: state.common.appName,
     currentUser: state.common.currentUser,
     redirectTo: state.common.redirectTo,
+    appLoaded: state.common.appLoaded,
   };
 };
 
@@ -35,10 +36,18 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.props.appLoaded) {
+      return (
+        <div>
+          <Header appName={this.props.appName} currentUser={this.props.currentUser} />
+          {this.props.children}
+        </div>
+      )
+    };
+    
     return (
       <div>
         <Header appName={this.props.appName} currentUser={this.props.currentUser} />
-        {this.props.children}
       </div>
     );
   };
